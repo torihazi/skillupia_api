@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "rebornix.ruby",
+    "castwide.solargraph",
+    "misogi.ruby-rubocop",
+    "aliariff.vscode-erb-beautify",
+    "ms-vscode.vscode-json",
+    "redhat.vscode-yaml",
+    "bradlc.vscode-tailwindcss",
+    "ms-vscode.vscode-typescript-next",
+    "esbenp.prettier-vscode",
+    "ms-vscode.vscode-eslint",
+    "github.vscode-pull-request-github",
+    "ms-vscode.vscode-docker"
+  ]
+}
