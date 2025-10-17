@@ -54,7 +54,6 @@ yarn-debug.log*
 *.sqlite3-journal
 
 # Ignore IDE files
-.vscode/
 .idea/
 *.swp
 *.swo
