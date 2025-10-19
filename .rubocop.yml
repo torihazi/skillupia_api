@@ -1,8 +1,35 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+# 最低限のコードformatter設定
+AllCops:
+  TargetRubyVersion: 3.0
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+  Exclude:
+    - "bin/**/*"
+    - "config/**/*"
+    - "db/**/*"
+    - "db/schema.rb"
+    - "lib/**/*"
+    - "log/**/*"
+    - "public/**/*"
+    - "storage/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Rakefile"
+    - "Gemfile"
+    - "config.ru"
+
+# 最も基本的な3つの設定
+Layout/LineLength:
+  Max: 120 # 行の最大長を120文字に設定
+
+Style/StringLiterals:
+  EnforcedStyle: single_quotes # 文字列リテラルはシングルクォートを使用
+
+Style/TrailingWhitespace:
+  Enabled: true # 行末の空白を禁止
+
+Style/FrozenStringLiteralComment:
+  Enabled: true # 文字列リテラルはシングルクォートを使用
+  EnforcedStyle: always # 文字列リテラルはシングルクォートを使用
+
+Style/Documentation:
+  Enabled: false # YARD形式のドキュメントコメントの記載要求を無効化
