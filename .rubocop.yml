@@ -30,3 +30,6 @@ Style/TrailingWhitespace:
 Style/FrozenStringLiteralComment:
   Enabled: true # 文字列リテラルはシングルクォートを使用
   EnforcedStyle: always # 文字列リテラルはシングルクォートを使用
+
+Style/Documentation:
+  Enabled: false # YARD形式のドキュメントコメントの記載要求を無効化
