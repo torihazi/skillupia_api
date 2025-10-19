@@ -1,47 +1,32 @@
 # 最低限のコードformatter設定
 AllCops:
-  NewCops: enable
   TargetRubyVersion: 3.0
 
-# 基本的なフォーマットルールのみ有効化
-Layout/IndentationWidth:
-  Enabled: true
-  Width: 2
+  Exclude:
+    - "bin/**/*"
+    - "config/**/*"
+    - "db/**/*"
+    - "db/schema.rb"
+    - "lib/**/*"
+    - "log/**/*"
+    - "public/**/*"
+    - "storage/**/*"
+    - "tmp/**/*"
+    - "vendor/**/*"
+    - "Rakefile"
+    - "Gemfile"
+    - "config.ru"
 
+# 最も基本的な3つの設定
 Layout/LineLength:
-  Enabled: true
-  Max: 120
+  Max: 120 # 行の最大長を120文字に設定
 
-Layout/TrailingWhitespace:
-  Enabled: true
+Style/StringLiterals:
+  EnforcedStyle: single_quotes # 文字列リテラルはシングルクォートを使用
 
-Layout/EmptyLines:
-  Enabled: true
-
-Layout/EmptyLinesAroundBlockBody:
-  Enabled: true
-
-Layout/EmptyLinesAroundClassBody:
-  Enabled: true
-
-Layout/EmptyLinesAroundMethodBody:
-  Enabled: true
-
-# その他のルールは無効化
-Style/Documentation:
-  Enabled: false
+Style/TrailingWhitespace:
+  Enabled: true # 行末の空白を禁止
 
 Style/FrozenStringLiteralComment:
-  Enabled: false
-
-Metrics/BlockLength:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
-
-Metrics/AbcSize:
-  Enabled: false
-
-Metrics/ClassLength:
-  Enabled: false
+  Enabled: true # 文字列リテラルはシングルクォートを使用
+  EnforcedStyle: always # 文字列リテラルはシングルクォートを使用
