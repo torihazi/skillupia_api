@@ -1,0 +1,16 @@
+# master key
+# このように書くと この名前を含むファイル or ディレクトリ含む配下全てが対象外になる
+master.key
+
+# env
+.env
+.envrc
+
+# logs
+log/*
+
+# storage (Active Storage)
+storage/*
+
+# tmp
+tmp/*
