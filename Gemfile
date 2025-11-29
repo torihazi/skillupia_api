@@ -13,11 +13,6 @@ gem "tzinfo-data", platforms: %i[ windows jruby ]
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
-# oauth
-gem "omniauth"
-gem "omniauth-rails_csrf_protection"
-gem "omniauth-google-oauth2"
-
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
   gem "brakeman", require: false
