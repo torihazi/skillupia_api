@@ -2,7 +2,7 @@
 name: RuboCop CI
 
 # ワークフロー実行名
-run-name: RuboCop Run by ${{ github.actor }}
+run-name: RuboCop Run by @${{ github.actor }}
 
 # ワークフローイベント
 # push イベントで実行
