@@ -1,0 +1,33 @@
+# ワークフロー名
+name: RuboCop CI
+
+# ワークフロー実行名
+run-name: RuboCop Run by ${{ github.actor }}
+
+# ワークフローイベント
+# push イベントで実行
+on: push
+
+# ワークフロー実行
+jobs:
+  # ジョブId
+  rubocop:
+    # ジョブ名
+    name: Run RuboCop
+    # ワークフロー実行環境
+    runs-on: ubuntu-latest
+    # ワークフロー実行ステップ
+    steps:
+      # リポジトリをクローン
+      - uses: actions/checkout@v4
+      # Ruby 環境セットアップ
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.4
+      # 依存関係をインストール
+      - name: Install dependencies
+        run: bundle install
+      # RuboCop を実行
+      - name: Run RuboCop
+        run: bundle exec rubocop
