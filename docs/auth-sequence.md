@@ -56,3 +56,9 @@ info => {
 - 全て null false で良い
 
 model ファイルは作成、全て validates の present をつけた。
+
+情報としてはめっちゃ良いけど next.js から rails の omniauth endpoint 叩くのだるそうだったから omniauth 断念
+
+Next.js 側で nextauth.js やることにした。
+
+結局またこれか
