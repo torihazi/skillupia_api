@@ -5,8 +5,11 @@ name: RuboCop CI
 run-name: RuboCop Run by @${{ github.actor }}
 
 # ワークフローイベント
-# push イベントで実行
-on: push
+# mainへの pull request イベントで実行
+on:
+  pull_request:
+    branches:
+      - main
 
 # ワークフロー実行
 jobs:
