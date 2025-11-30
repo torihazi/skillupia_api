@@ -40,5 +40,12 @@ module App
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # 不要な spec ファイルを生成しない
+    # TODO: 設定できる項目とこの設定がどこに聞いてくるのかを調べる
+    config.generators do |g|
+      g.test_framework :rspec
+      g.request_specs false
+    end
   end
 end
