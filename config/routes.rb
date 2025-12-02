@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   
-  resource :users do
+  resources :users do
     get :setup, on: :collection
   end
   

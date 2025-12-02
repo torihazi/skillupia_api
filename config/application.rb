@@ -41,8 +41,8 @@ module App
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    # 不要な spec ファイルを生成しない
-    # TODO: 設定できる項目とこの設定がどこに聞いてくるのかを調べる
+    # ジェネレータ設定: RSpecを使用し、request_specsは生成しない
+    # この設定により、rails generateコマンド実行時にrequest_specsファイルが自動生成されない
     config.generators do |g|
       g.test_framework :rspec
       g.request_specs false
