@@ -18,9 +18,7 @@ module Authentication
 
   class BearerTokenExtractor
     class Error < StandardError; end
-    class MissingHeaderError < Error; end
     class InvalidFormatError < Error; end
-    class MissingTokenError < Error; end
 
     BEARER_PREFIX = 'Bearer'
 
@@ -35,35 +33,22 @@ module Authentication
     end
 
     def extract
-      validate_format
-      token = extract_token
-      validate_token_presence(token)
-      token
+      parts = split_header
+      validate_format(parts)
+      parts.last
     end
 
     private
 
     attr_reader :bearer_header
 
-    # initializeでチェックしているので不要
-    # def validate_header_presence
-    #   return if bearer_header.present?
-
-    #   raise MissingHeaderError, 'Authorization header is missing'
-    # end
-
-    def validate_format
-      return if bearer_header.start_with?(BEARER_PREFIX)
-      raise InvalidFormatError, 'Authorization header must start with "Bearer "'
+    def split_header
+      bearer_header.split(' ')
     end
 
-    def extract_token
-      bearer_header.split(' ').last
-    end
-
-    def validate_token_presence(token)
-      return if token.present?
-      raise MissingTokenError, 'Token is missing'
+    def validate_format(parts)
+      return if parts.first.start_with?(BEARER_PREFIX) && parts.size == 2
+      raise InvalidFormatError, 'Authorization header must start with "Bearer " and have exactly 2 parts'
     end
   end
 end
