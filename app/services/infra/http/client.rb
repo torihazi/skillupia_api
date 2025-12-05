@@ -57,44 +57,25 @@ require 'json'
 module Infra
   module Http
     class Client
-      # TODO: 実装を追加
-
       def get(url, headers: {})
-        http_client = create_http_client(url)
-        http_request = create_http_request(Net::HTTP::Get, url, headers: headers)
-        response = send_request(http_client, http_request)
-        handle_response(response)
-      rescue => e
-        handle_error(e)
-      end
-
-      private
-
-      def create_http_client(url)
         uri = URI.parse(url)
-      end
-
-      def create_http_request(method, url, headers: {})
-        uri = URI.parse(url)
-        http_request = method.new(uri)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme == 'https'
+        http_request = Net::HTTP::Get.new(uri)
         headers.each { |key, value| http_request[key] = value }
-        http_request
-      end
-
-      def send_request(http_client, http_request)
-        http_client.request(http_request)
-      end
-
-      def handle_response(response)
+        response = http.request(http_request)
         Response.new(response)
-      rescue => e
-        Rails.logger.error "Error: #{e.message}"
-        raise e
       end
 
-      def handle_error(e)
-        Rails.logger.error "Error: #{e.message}"
-        raise e
+      def post(url, headers: {}, body: {})
+        uri = URI.parse(url)
+        http = Net::HTTP.new(uri.host, uri.port)
+        http.use_ssl = uri.scheme == 'https'
+        http_request = Net::HTTP::Post.new(uri)
+        headers.each { |key, value| http_request[key] = value }
+        http_request.body = body.to_json
+        response = http.request(http_request)
+        Response.new(response)
       end
     end
   end

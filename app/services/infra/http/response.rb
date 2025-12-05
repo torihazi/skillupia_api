@@ -4,7 +4,7 @@ module Infra
       attr_reader :status, :body, :headers
 
       def initialize(net_http_response)
-        raise ArgumentError, 'net_http_response is required' unless net_http_response.nil?
+        raise ArgumentError, 'net_http_response is required' if net_http_response.nil?
 
         # 複数のパターンに対応
         @status = extract_status(net_http_response)
