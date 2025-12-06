@@ -4,7 +4,7 @@ module Infra
       # カスタムエラークラスを定義
       class Error < StandardError; end
 
-      attr_reader :status, :body, :headers
+      attr_reader :status, :body, :header
 
       def initialize(net_http_response)
         raise ArgumentError, "net_http_response is required" if net_http_response.nil?
@@ -12,7 +12,7 @@ module Infra
         # 複数のパターンに対応
         @status = extract_status(net_http_response)
         @body = extract_body(net_http_response)
-        @headers = extract_headers(net_http_response)
+        @header = extract_header(net_http_response)
       end
 
       def json
@@ -60,12 +60,12 @@ module Infra
         end
       end
 
-      def extract_headers(response)
+      def extract_header(response)
         # headersがあるか確認し結果を返す
-        if response.respond_to?(:headers)
-          response.headers
+        if response.respond_to?(:header)
+          response.header
         else
-          raise ArgumentError, "response must respond to headers"
+          raise ArgumentError, "response must respond to header"
         end
       end
     end

@@ -41,7 +41,7 @@ module Infra
         status = response.status
         case status
         when 200..299
-          response
+          response.json
         when 400..499
           raise ClientError, response.body
         when 500..599

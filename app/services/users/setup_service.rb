@@ -18,10 +18,10 @@ module Users
     end
 
     def fetch_user_info(token)
-      Infra::Http::Client.get(
+      Infra::Http::Client.new.get(
         url: "https://www.googleapis.com/oauth2/v3/userinfo",
         headers: { "Authorization" => "Bearer #{token}" }
-      ).json
+      )
     end
 
     def setup_user(user_info)
