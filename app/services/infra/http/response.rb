@@ -1,6 +1,10 @@
 module Infra
   module Http
     class Response
+
+      # カスタムエラークラスを定義
+      class Error < StandardError; end
+
       attr_reader :status, :body, :headers
 
       def initialize(net_http_response)
@@ -13,9 +17,11 @@ module Infra
       end
 
       def json
+        raise Error, 'status is not 2xx' unless success?
+        return nil if status == 204
         @json ||= JSON.parse(body)
       rescue JSON::ParserError => e
-        raise JSON::ParserError, 'Failed to parse JSON'
+        raise Error, "Failed to parse JSON: #{e.message}"
       end
 
       def success?
