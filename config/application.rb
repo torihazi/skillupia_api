@@ -40,5 +40,12 @@ module App
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # ジェネレータ設定: RSpecを使用し、request_specsは生成しない
+    # この設定により、rails generateコマンド実行時にrequest_specsファイルが自動生成されない
+    config.generators do |g|
+      g.test_framework :rspec
+      g.request_specs false
+    end
   end
 end
