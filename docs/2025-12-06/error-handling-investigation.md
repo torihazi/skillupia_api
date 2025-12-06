@@ -25,7 +25,8 @@ end
 ```
 
 **現状:**
-- 全ての`StandardError`をキャッチして500エラーとして返している
+
+- 全ての`StandardError`をキャッチして 500 エラーとして返している
 - エラーの種類に関わらず、一律で`internal_server_error`を返している
 - エラーメッセージは固定の「An unexpected error occurred」のみ
 
@@ -41,6 +42,7 @@ end
 ```
 
 **現状:**
+
 - エラーハンドリングが実装されていない
 - サービスから例外が発生した場合、`ApplicationController`の`handle_standard_error`で処理される
 
@@ -63,8 +65,9 @@ end
 ```
 
 **現状:**
-- `ClientError`、`ServerError`、`UnknownError`をraiseしているが、これらのクラスが定義されていない
-- HTTPステータスコードに応じて適切なエラークラスをraiseしようとしているが、実装が不完全
+
+- `ClientError`、`ServerError`、`UnknownError`を raise しているが、これらのクラスが定義されていない
+- HTTP ステータスコードに応じて適切なエラークラスを raise しようとしているが、実装が不完全
 
 ### 4. Infra::Http::Response
 
@@ -96,6 +99,7 @@ module Infra
 ```
 
 **現状:**
+
 - `Response::Error`という独自のエラークラスを定義している
 - `StandardError`を継承しているが、他のエラークラスとの階層関係がない
 
@@ -140,6 +144,7 @@ module Infra
 ```
 
 **現状:**
+
 - `InvalidFormatError`という独自のエラークラスを定義している
 - 認証エラー（401）として扱うべきだが、現在は`StandardError`として処理される
 
@@ -184,6 +189,7 @@ end
 ```
 
 **現状:**
+
 - エラーハンドリングが実装されていない
 - 各メソッドで発生する例外はそのまま上位に伝播する
 
@@ -192,40 +198,48 @@ end
 ### 1. 未定義のエラークラス
 
 **問題:**
-- `Infra::Http::Client`で`ClientError`、`ServerError`、`UnknownError`をraiseしているが、これらのクラスが定義されていない
+
+- `Infra::Http::Client`で`ClientError`、`ServerError`、`UnknownError`を raise しているが、これらのクラスが定義されていない
 - 実行時に`NameError`が発生する可能性がある
 
 **影響:**
-- HTTPクライアントのエラーハンドリングが機能しない
-- 外部API呼び出し時のエラーが適切に処理されない
+
+- HTTP クライアントのエラーハンドリングが機能しない
+- 外部 API 呼び出し時のエラーが適切に処理されない
 
 ### 2. 不適切なエラーハンドリング
 
 **問題:**
-- `ApplicationController`で全てのエラーを500エラーとして返している
-- クライアントエラー（400系）とサーバーエラー（500系）の区別がない
+
+- `ApplicationController`で全てのエラーを 500 エラーとして返している
+- クライアントエラー（400 系）とサーバーエラー（500 系）の区別がない
 
 **影響:**
+
 - クライアントが適切なエラーハンドリングを行えない
 - エラーの種類に応じた適切な対応ができない
 - デバッグが困難
 
 **具体例:**
-- 認証エラー（401）が500エラーとして返される
-- バリデーションエラー（422）が500エラーとして返される
-- リソースが見つからない（404）が500エラーとして返される
+
+- 認証エラー（401）が 500 エラーとして返される
+- バリデーションエラー（422）が 500 エラーとして返される
+- リソースが見つからない（404）が 500 エラーとして返される
 
 ### 3. エラークラスの階層構造がない
 
 **問題:**
+
 - 各サービスで独自のエラークラスを定義しているが、統一された階層構造がない
 - `StandardError`を直接継承しているため、エラーの種類を判別しにくい
 
 **影響:**
+
 - エラーハンドリングが複雑になる
 - エラーの種類に応じた適切な処理ができない
 
 **現在のエラークラス:**
+
 - `Infra::Http::Response::Error < StandardError`
 - `Authentication::BearerTokenExtractor::Error < StandardError`
 - `Authentication::BearerTokenExtractor::InvalidFormatError < Error`
@@ -233,30 +247,36 @@ end
 ### 4. エラーメッセージの形式が統一されていない
 
 **問題:**
+
 - エラーメッセージの形式が統一されていない
 - エラーの種類によってメッセージ形式が異なる
 
 **現状:**
+
 - `ApplicationController`: `{ error: "An unexpected error occurred" }`
 - `Infra::Http::Client`: `response.body`をそのままエラーメッセージとして使用
 - `Authentication::BearerTokenExtractor`: カスタムメッセージ
 
 **影響:**
+
 - フロントエンドでのエラーハンドリングが複雑になる
 - エラーメッセージの形式が予測できない
 
 ### 5. エラーログの詳細度が不十分
 
 **問題:**
+
 - エラーログにはメッセージとバックトレースのみが記録されている
 - エラーの種類やコンテキスト情報が不足している
 
 **現状:**
+
 ```ruby
 Rails.logger.error "Standard error occurred: #{error.message}\n#{error.backtrace.join("\n")}"
 ```
 
 **影響:**
+
 - エラーの原因を特定しにくい
 - デバッグが困難
 
@@ -265,36 +285,40 @@ Rails.logger.error "Standard error occurred: #{error.message}\n#{error.backtrace
 ### 現在のエラーフロー
 
 1. **サービス層でエラー発生**
+
    - `Users::SetupService` → `Authentication::BearerTokenExtractor::InvalidFormatError`
    - `Users::SetupService` → `Infra::Http::Client` → `ClientError`（未定義）
    - `Users::SetupService` → `Infra::Http::Response::Error`
 
 2. **コントローラー層でエラー処理**
+
    - `UsersController` → エラーハンドリングなし
-   - `ApplicationController::handle_standard_error` → 全て500エラーとして返す
+   - `ApplicationController::handle_standard_error` → 全て 500 エラーとして返す
 
 3. **クライアントへのレスポンス**
-   - 全て `{ error: "An unexpected error occurred" }` + 500ステータス
+   - 全て `{ error: "An unexpected error occurred" }` + 500 ステータス
 
 ### 問題のあるエラーフロー例
 
-**ケース1: 認証ヘッダーが不正な場合**
+**ケース 1: 認証ヘッダーが不正な場合**
+
 1. `BearerTokenExtractor::InvalidFormatError`が発生
 2. `ApplicationController::handle_standard_error`でキャッチ
-3. 500エラーとして返される（本来は401エラー）
+3. 500 エラーとして返される（本来は 401 エラー）
 
-**ケース2: 外部APIが400エラーを返した場合**
-1. `Infra::Http::Client`で`ClientError`をraiseしようとする
+**ケース 2: 外部 API が 400 エラーを返した場合**
+
+1. `Infra::Http::Client`で`ClientError`を raise しようとする
 2. `ClientError`が未定義のため`NameError`が発生
 3. `ApplicationController::handle_standard_error`でキャッチ
-4. 500エラーとして返される（本来は400エラー）
+4. 500 エラーとして返される（本来は 400 エラー）
 
 ## まとめ
 
 ### 主要な問題
 
 1. **未定義のエラークラス**: `ClientError`、`ServerError`、`UnknownError`が定義されていない
-2. **不適切なHTTPステータスコード**: 全てのエラーが500エラーとして返される
+2. **不適切な HTTP ステータスコード**: 全てのエラーが 500 エラーとして返される
 3. **エラークラスの階層構造がない**: 統一されたエラークラス階層がない
 4. **エラーメッセージの形式が統一されていない**: エラーの種類によって形式が異なる
 5. **エラーログの詳細度が不十分**: エラーの原因を特定しにくい
@@ -303,10 +327,9 @@ Rails.logger.error "Standard error occurred: #{error.message}\n#{error.backtrace
 
 - **コントローラー層**: エラーハンドリングが不適切
 - **サービス層**: エラークラスが未定義または不統一
-- **インフラ層**: HTTPクライアントのエラーハンドリングが機能しない
+- **インフラ層**: HTTP クライアントのエラーハンドリングが機能しない
 - **認証層**: 認証エラーが適切に処理されない
 
 ### 次のステップ
 
 対応方針については別途相談が必要。
-
