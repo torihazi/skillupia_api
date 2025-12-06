@@ -12,6 +12,12 @@ module Infra
         @headers = extract_headers(net_http_response)
       end
 
+      def json
+        @json ||= JSON.parse(body)
+      rescue JSON::ParserError => e
+        raise JSON::ParserError, 'Failed to parse JSON'
+      end
+
       def success?
         status.between?(200, 299)
       end
