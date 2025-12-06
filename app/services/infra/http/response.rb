@@ -24,12 +24,19 @@ module Infra
         raise Error, "Failed to parse JSON: #{e.message}"
       end
 
+      # いらないかも。
       def success?
         status.between?(200, 299)
       end
 
-      def error?
-        status.between?(400, 599)
+      # clienterrorだからって特に気にならないからいらないかも
+      def client_error?
+        status.between?(400, 499)
+      end
+
+      # servererrorだからってerrorなったから気になるわけだしいらないかも
+      def server_error?
+        status.between?(500, 599)
       end
 
       private
