@@ -56,6 +56,7 @@ require 'json'
 
 module Infra
   module Http
+    # urlを渡せば、httpリクエストを送信して、Responseオブジェクトを返す
     class Client
       def get(url, headers: {})
         uri = URI.parse(url)
