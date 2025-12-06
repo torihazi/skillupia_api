@@ -42,12 +42,29 @@ module Infra
         case status
         when 200..299
           response.json
-        when 400..499
-          raise ClientError, response.body
+        when 401, 403
+          # 認証・認可エラーはクライアントの入力が原因なので、そのまま返す
+          raise ApplicationError::UnauthorizedError.new(
+            "External API returned #{status}",
+            context: { external_status: status, external_body: response.body }
+          )
+        when 400, 404, 422
+          # その他の400系は外部API側の問題の可能性があるので502
+          raise ApplicationError::BadGatewayError.new(
+            "External API returned #{status}",
+            context: { external_status: status, external_body: response.body }
+          )
         when 500..599
-          raise ServerError, response.body
+          # 外部APIのサーバーエラーは502
+          raise ApplicationError::BadGatewayError.new(
+            "External API returned #{status}",
+            context: { external_status: status, external_body: response.body }
+          )
         else
-          raise UnknownError, response.body
+          raise ApplicationError::InternalServerError.new(
+            "Unknown status code: #{status}",
+            context: { external_status: status, external_body: response.body }
+          )
         end
       end
     end

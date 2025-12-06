@@ -16,12 +16,17 @@ RSpec.describe Authentication::BearerTokenExtractor do
 
       it 'raises error when header does not start with "Bearer"' do
         extractor = Authentication::BearerTokenExtractor.new(invalid_header)
-        expect { extractor.extract }.to raise_error(Authentication::BearerTokenExtractor::InvalidFormatError)
+        expect { extractor.extract }.to raise_error(ApplicationError::UnauthorizedError)
       end
 
       it 'raises error when header does not have exactly 2 parts' do
         extractor = Authentication::BearerTokenExtractor.new(missing_token_header)
-        expect { extractor.extract }.to raise_error(Authentication::BearerTokenExtractor::InvalidFormatError)
+        expect { extractor.extract }.to raise_error(ApplicationError::UnauthorizedError)
+      end
+
+      it 'raises error when header is blank' do
+        expect { Authentication::BearerTokenExtractor.new('') }.to raise_error(ApplicationError::BadRequestError)
+        expect { Authentication::BearerTokenExtractor.new(nil) }.to raise_error(ApplicationError::BadRequestError)
       end
     end
   end

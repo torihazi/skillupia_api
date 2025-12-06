@@ -1,13 +1,13 @@
 module Infra
   module Http
     class Response
-      # カスタムエラークラスを定義
-      class Error < StandardError; end
-
       attr_reader :status, :body, :header
 
       def initialize(net_http_response)
-        raise ArgumentError, "net_http_response is required" if net_http_response.nil?
+        raise ApplicationError::InternalServerError.new(
+          "net_http_response is required",
+          context: { method: :initialize }
+        ) if net_http_response.nil?
 
         # 複数のパターンに対応
         @status = extract_status(net_http_response)
@@ -16,26 +16,22 @@ module Infra
       end
 
       def json
-        raise Error, "status is not 2xx" unless success?
+        raise ApplicationError::InternalServerError.new(
+          "Response status is not 2xx: #{status}",
+          context: { status: status, method: :json }
+        ) unless success?
+        
         return nil if status == 204
         @json ||= JSON.parse(body)
       rescue JSON::ParserError => e
-        raise Error, "Failed to parse JSON: #{e.message}"
+        raise ApplicationError::InternalServerError.new(
+          "Failed to parse JSON: #{e.message}",
+          context: { parse_error: e.message, method: :json }
+        )
       end
 
-      # いらないかも。
       def success?
         status.between?(200, 299)
-      end
-
-      # clienterrorだからって特に気にならないからいらないかも
-      def client_error?
-        status.between?(400, 499)
-      end
-
-      # servererrorだからってerrorなったから気になるわけだしいらないかも
-      def server_error?
-        status.between?(500, 599)
       end
 
       private
@@ -47,7 +43,10 @@ module Infra
         elsif response.respond_to?(:status)
           response.status.to_i
         else
-          raise ArgumentError, "response must respond to code or status"
+          raise ApplicationError::InternalServerError.new(
+            "response must respond to code or status",
+            context: { method: :extract_status }
+          )
         end
       end
 
@@ -56,7 +55,10 @@ module Infra
         if response.respond_to?(:body)
           response.body
         else
-          raise ArgumentError, "response must respond to body"
+          raise ApplicationError::InternalServerError.new(
+            "response must respond to body",
+            context: { method: :extract_body }
+          )
         end
       end
 
@@ -65,7 +67,10 @@ module Infra
         if response.respond_to?(:header)
           response.header
         else
-          raise ArgumentError, "response must respond to header"
+          raise ApplicationError::InternalServerError.new(
+            "response must respond to header",
+            context: { method: :extract_header }
+          )
         end
       end
     end

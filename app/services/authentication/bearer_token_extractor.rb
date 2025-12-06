@@ -16,14 +16,14 @@ module Authentication
   # このクラス内に限って参照できれば良いので private attr_readerで公開する
 
   class BearerTokenExtractor
-    class Error < StandardError; end
-    class InvalidFormatError < Error; end
-
     BEARER_PREFIX = "Bearer"
 
     def initialize(bearer_header)
       # ここでチェックしたいのは 文字列があるか "" or nilではないか
-      raise ArgumentError, "bearer_header is required" if bearer_header.blank?
+      raise ApplicationError::BadRequestError.new(
+        "bearer_header is required",
+        context: { method: :initialize }
+      ) if bearer_header.blank?
       @bearer_header = bearer_header
     end
 
@@ -47,7 +47,10 @@ module Authentication
 
     def validate_format(parts)
       return if parts.first.start_with?(BEARER_PREFIX) && parts.size == 2
-      raise InvalidFormatError, 'Authorization header must start with "Bearer " and have exactly 2 parts'
+      raise ApplicationError::UnauthorizedError.new(
+        'Authorization header must start with "Bearer " and have exactly 2 parts',
+        context: { method: :validate_format, header: bearer_header }
+      )
     end
   end
 end

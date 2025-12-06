@@ -1,0 +1,26 @@
+en:
+  errors:
+    application_error:
+      bad_request_error: "Bad request"
+      unauthorized_error: "Authentication failed. Please login again."
+      forbidden_error: "You don't have permission to perform this action."
+      not_found_error: "Resource not found."
+      validation_error: "Validation failed."
+      internal_server_error: "An internal server error occurred. Please try again later."
+      bad_gateway_error: "External service error occurred."
+      service_unavailable_error: "Service is temporarily unavailable."
+      gateway_timeout_error: "Connection to external service timed out."
+
+ja:
+  errors:
+    application_error:
+      bad_request_error: "リクエストが不正です。"
+      unauthorized_error: "認証に失敗しました。再度ログインしてください。"
+      forbidden_error: "この操作を実行する権限がありません。"
+      not_found_error: "リソースが見つかりませんでした。"
+      validation_error: "入力内容に誤りがあります。"
+      internal_server_error: "サーバーエラーが発生しました。しばらくしてから再度お試しください。"
+      bad_gateway_error: "外部サービスでエラーが発生しました。"
+      service_unavailable_error: "サービスが一時的に利用できません。"
+      gateway_timeout_error: "外部サービスへの接続がタイムアウトしました。"
+
