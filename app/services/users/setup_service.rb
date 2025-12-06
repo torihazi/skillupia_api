@@ -8,7 +8,7 @@ module Users
       token = extract_token(auth_header)
       user_info = fetch_user_info(token)
       # user_infoにsub, name, email, pictureが含まれている前提。
-      user = sync_user(user_info)
+      setup_user(user_info)
     end
 
     private
@@ -24,7 +24,7 @@ module Users
       ).json
     end
 
-    def sync_user(user_info)
+    def setup_user(user_info)
       User.find_or_create_by(uid: user_info['sub']) do |u|
         u.name = user_info['name']
         u.email = user_info['email']
