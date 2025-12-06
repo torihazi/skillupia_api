@@ -5,6 +5,6 @@ class ApplicationController < ActionController::API
 
   def handle_standard_error(error)
     Rails.logger.error "Standard error occurred: #{error.message}\n#{error.backtrace.join("\n")}"
-    render json: { error: 'An unexpected error occurred' }, status: :internal_server_error
+    render json: { error: "An unexpected error occurred" }, status: :internal_server_error
   end
 end

@@ -19,18 +19,17 @@ module Users
 
     def fetch_user_info(token)
       Infra::Http::Client.get(
-        url: 'https://www.googleapis.com/oauth2/v3/userinfo',
-        headers: { 'Authorization' => "Bearer #{token}" }
+        url: "https://www.googleapis.com/oauth2/v3/userinfo",
+        headers: { "Authorization" => "Bearer #{token}" }
       ).json
     end
 
     def setup_user(user_info)
-      User.find_or_create_by(uid: user_info['sub']) do |u|
-        u.name = user_info['name']
-        u.email = user_info['email']
-        u.image = user_info['picture']
+      User.find_or_create_by(uid: user_info["sub"]) do |u|
+        u.name = user_info["name"]
+        u.email = user_info["email"]
+        u.image = user_info["picture"]
       end
     end
   end
 end
-

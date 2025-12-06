@@ -5,8 +5,8 @@
 # - HTTP通信の共通処理（SSL設定、タイムアウト、エラーハンドリングなど）
 # - ドメイン固有のロジックは含めない（Google::UserinfoClientなどが利用）
 
-require 'net/http'
-require 'uri'
+require "net/http"
+require "uri"
 
 module Infra
   module Http
@@ -14,7 +14,7 @@ module Infra
       def get(url:, headers: {})
         uri = URI.parse(url)
         http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = uri.scheme == 'https'
+        http.use_ssl = uri.scheme == "https"
         http_request = Net::HTTP::Get.new(uri)
         headers.each { |key, value| http_request[key] = value }
         response = http.request(http_request)
@@ -24,7 +24,7 @@ module Infra
       def post(url:, headers: {}, body: {})
         uri = URI.parse(url)
         http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = uri.scheme == 'https'
+        http.use_ssl = uri.scheme == "https"
         http_request = Net::HTTP::Post.new(uri)
         headers.each { |key, value| http_request[key] = value }
         http_request.body = body.to_json

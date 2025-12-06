@@ -1,5 +1,4 @@
 module Authentication
-
   # [責務]
   # 認証ヘッダーから トークンを抽出する
   # それを行う上で何が必要だろうか。
@@ -20,11 +19,11 @@ module Authentication
     class Error < StandardError; end
     class InvalidFormatError < Error; end
 
-    BEARER_PREFIX = 'Bearer'
+    BEARER_PREFIX = "Bearer"
 
     def initialize(bearer_header)
       # ここでチェックしたいのは 文字列があるか "" or nilではないか
-      raise ArgumentError, 'bearer_header is required' if bearer_header.blank?
+      raise ArgumentError, "bearer_header is required" if bearer_header.blank?
       @bearer_header = bearer_header
     end
 
@@ -43,7 +42,7 @@ module Authentication
     attr_reader :bearer_header
 
     def split_header
-      bearer_header.split(' ')
+      bearer_header.split(" ")
     end
 
     def validate_format(parts)
@@ -52,4 +51,3 @@ module Authentication
     end
   end
 end
-
