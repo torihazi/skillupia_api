@@ -18,9 +18,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_11_28_225557) do
     t.string "uid", null: false
     t.string "name", null: false
     t.string "email", null: false
-    t.string "image", null: false
+    t.string "image"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["uid", "email"], name: "index_users_on_uid_and_email", unique: true
   end
 end
