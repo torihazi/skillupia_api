@@ -3,4 +3,3 @@ class ApplicationError::ForbiddenError < ApplicationError
     403
   end
 end
-

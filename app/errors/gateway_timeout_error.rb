@@ -3,4 +3,3 @@ class ApplicationError::GatewayTimeoutError < ApplicationError
     504
   end
 end
-

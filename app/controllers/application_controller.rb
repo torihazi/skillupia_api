@@ -8,7 +8,7 @@ class ApplicationController < ActionController::API
     # サーバー側: 詳細ログ
     Rails.logger.error({
       error_class: error.class.name,
-      message: error.message,
+      message: error.message
     }.to_json)
 
     # フロント側: user-friendlyなメッセージ
@@ -27,7 +27,7 @@ class ApplicationController < ActionController::API
 
     # フロント側: 汎用的なエラーメッセージ
     render json: {
-      error: I18n.t('errors.application_error.internal_server_error', default: "An unexpected error occurred"),
+      error: I18n.t("errors.application_error.internal_server_error", default: "An unexpected error occurred"),
       code: "INTERNAL_SERVER_ERROR"
     }, status: :internal_server_error
   end

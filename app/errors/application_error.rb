@@ -30,4 +30,3 @@ class ApplicationError < StandardError
     self.class.name.demodulize.humanize
   end
 end
-

@@ -3,4 +3,3 @@ class ApplicationError::ValidationError < ApplicationError
     422
   end
 end
-

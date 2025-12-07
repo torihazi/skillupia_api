@@ -3,4 +3,3 @@ class ApplicationError::BadGatewayError < ApplicationError
     502
   end
 end
-

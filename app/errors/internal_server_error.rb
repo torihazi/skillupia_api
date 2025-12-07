@@ -3,4 +3,3 @@ class ApplicationError::InternalServerError < ApplicationError
     500
   end
 end
-

@@ -3,4 +3,3 @@ class ApplicationError::BadRequestError < ApplicationError
     400
   end
 end
-

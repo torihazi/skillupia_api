@@ -3,4 +3,3 @@ class ApplicationError::UnauthorizedError < ApplicationError
     401
   end
 end
-

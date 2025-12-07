@@ -18,7 +18,7 @@ module Infra
         raise ApplicationError::InternalServerError.new(
           "Response status is not 2xx: #{status}",
         ) unless success?
-        
+
         return nil if status == 204
         @json ||= JSON.parse(body)
       rescue JSON::ParserError => e

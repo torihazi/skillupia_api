@@ -3,4 +3,3 @@ class ApplicationError::NotFoundError < ApplicationError
     404
   end
 end
-

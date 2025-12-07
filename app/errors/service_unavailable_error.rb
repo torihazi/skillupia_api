@@ -3,4 +3,3 @@ class ApplicationError::ServiceUnavailableError < ApplicationError
     503
   end
 end
-
