@@ -6,7 +6,6 @@ module Infra
       def initialize(net_http_response)
         raise ApplicationError::InternalServerError.new(
           "net_http_response is required",
-          context: { method: :initialize }
         ) if net_http_response.nil?
 
         # 複数のパターンに対応
@@ -18,7 +17,6 @@ module Infra
       def json
         raise ApplicationError::InternalServerError.new(
           "Response status is not 2xx: #{status}",
-          context: { status: status, method: :json }
         ) unless success?
         
         return nil if status == 204
@@ -26,7 +24,6 @@ module Infra
       rescue JSON::ParserError => e
         raise ApplicationError::InternalServerError.new(
           "Failed to parse JSON: #{e.message}",
-          context: { parse_error: e.message, method: :json }
         )
       end
 
@@ -45,7 +42,6 @@ module Infra
         else
           raise ApplicationError::InternalServerError.new(
             "response must respond to code or status",
-            context: { method: :extract_status }
           )
         end
       end
@@ -57,7 +53,6 @@ module Infra
         else
           raise ApplicationError::InternalServerError.new(
             "response must respond to body",
-            context: { method: :extract_body }
           )
         end
       end
@@ -69,7 +64,6 @@ module Infra
         else
           raise ApplicationError::InternalServerError.new(
             "response must respond to header",
-            context: { method: :extract_header }
           )
         end
       end

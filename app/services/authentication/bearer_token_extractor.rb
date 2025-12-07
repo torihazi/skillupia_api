@@ -22,7 +22,6 @@ module Authentication
       # ここでチェックしたいのは 文字列があるか "" or nilではないか
       raise ApplicationError::BadRequestError.new(
         "bearer_header is required",
-        context: { method: :initialize }
       ) if bearer_header.blank?
       @bearer_header = bearer_header
     end
@@ -49,7 +48,6 @@ module Authentication
       return if parts.first.start_with?(BEARER_PREFIX) && parts.size == 2
       raise ApplicationError::UnauthorizedError.new(
         'Authorization header must start with "Bearer " and have exactly 2 parts',
-        context: { method: :validate_format, header: bearer_header }
       )
     end
   end

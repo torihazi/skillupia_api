@@ -1,8 +1,7 @@
 class ApplicationError < StandardError
-  attr_reader :context, :http_status
+  attr_reader :http_status
 
-  def initialize(message = nil, context: {}, http_status: nil)
-    @context = context
+  def initialize(message = nil, http_status: nil)
     @http_status = http_status || self.class.http_status
     super(message || default_message)
   end
@@ -22,19 +21,13 @@ class ApplicationError < StandardError
 
   # フロントエンド用のuser-friendlyなメッセージを取得
   def user_message
-    I18n.t(i18n_key, default: default_message, **i18n_options)
+    I18n.t(i18n_key, default: default_message)
   end
 
   private
 
   def default_message
     self.class.name.demodulize.humanize
-  end
-
-  def i18n_options
-    {}.tap do |options|
-      options[:external_status] = context[:external_status] if context[:external_status]
-    end
   end
 end
 

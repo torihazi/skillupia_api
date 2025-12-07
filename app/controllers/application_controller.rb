@@ -9,10 +9,6 @@ class ApplicationController < ActionController::API
     Rails.logger.error({
       error_class: error.class.name,
       message: error.message,
-      context: error.context,
-      backtrace: error.backtrace,
-      request_id: request.request_id,
-      user_id: current_user&.id
     }.to_json)
 
     # フロント側: user-friendlyなメッセージ
@@ -26,9 +22,7 @@ class ApplicationController < ActionController::API
     # サーバー側: 詳細ログ
     Rails.logger.error({
       error_class: error.class.name,
-      message: error.message,
-      backtrace: error.backtrace,
-      request_id: request.request_id
+      message: error.message
     }.to_json)
 
     # フロント側: 汎用的なエラーメッセージ
