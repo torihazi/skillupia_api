@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::API
-  rescue_from ApplicationError, with: :handle_application_error
   rescue_from StandardError, with: :handle_standard_error
+  rescue_from ApplicationError, with: :handle_application_error
 
   private
 
